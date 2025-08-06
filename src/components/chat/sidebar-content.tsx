@@ -191,7 +191,7 @@ export default function SidebarContent({
                     </SidebarMenuButton>
                 </SidebarMenuItem>
             </SidebarMenu>
-            <SidebarMenu>
+            <SidebarMenu className={`${state === 'collapsed' ? 'hidden' : 'block'}`}>
               {sessions.map((session:any) => (
                 <SessionItem
                   key={session.id}
