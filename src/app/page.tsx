@@ -1,3 +1,4 @@
+
 "use client";
 
 import React, { useState, useMemo, useCallback, useEffect } from 'react';
@@ -188,38 +189,42 @@ export default function OpenGeminiPage() {
             onEditProfile={() => setIsProfileDialogOpen(true)}
           />
         </Sidebar>
-        <SidebarInset className="relative flex flex-col flex-1">
-           <TooltipProvider>
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <button
-                    onClick={() => setIsProfileDialogOpen(true)}
-                    className="absolute top-4 right-4 z-10"
-                  >
-                    <Avatar className="h-8 w-8">
-                      {userProfile.photoDataUri ? (
-                        <AvatarImage
-                          src={userProfile.photoDataUri}
-                          alt={userProfile.name}
-                        />
-                      ) : (
-                        <AvatarFallback>
-                          {userProfile.name?.[0]?.toUpperCase() || <User className="h-5 w-5" />}
-                        </AvatarFallback>
-                      )}
-                    </Avatar>
-                  </button>
-                </TooltipTrigger>
-                <TooltipContent>
-                  <p>Edit Profile</p>
-                </TooltipContent>
-              </Tooltip>
-            </TooltipProvider>
+        <SidebarInset className="flex flex-col flex-1">
+            <header className="flex items-center justify-between p-4 border-b">
+              <div className="flex items-center gap-2">
+                <MobileMenuButton />
+                <h1 className="text-lg font-semibold font-headline">{activeChat ? activeChat.title : "DarlynAI"}</h1>
+              </div>
+              <TooltipProvider>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <button
+                      onClick={() => setIsProfileDialogOpen(true)}
+                    >
+                      <Avatar className="h-8 w-8">
+                        {userProfile.photoDataUri ? (
+                          <AvatarImage
+                            src={userProfile.photoDataUri}
+                            alt={userProfile.name}
+                          />
+                        ) : (
+                          <AvatarFallback>
+                            {userProfile.name?.[0]?.toUpperCase() || <User className="h-5 w-5" />}
+                          </AvatarFallback>
+                        )}
+                      </Avatar>
+                    </button>
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    <p>Edit Profile</p>
+                  </TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
+            </header>
             <ChatArea
               activeChat={activeChat}
               isLoading={isLoading}
               onSendMessage={handleSendMessage}
-              mobileMenuButton={<MobileMenuButton />}
               userProfile={userProfile}
             />
         </SidebarInset>

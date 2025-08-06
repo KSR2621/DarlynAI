@@ -1,3 +1,4 @@
+
 "use client";
 
 import React from 'react';
@@ -13,22 +14,15 @@ import { User } from 'lucide-react';
 import type { UserProfile } from '@/hooks/use-user-profile';
 import Image from 'next/image';
 
-export default function ChatArea({ activeChat, isLoading, onSendMessage, mobileMenuButton, userProfile }: {
+export default function ChatArea({ activeChat, isLoading, onSendMessage, userProfile }: {
   activeChat: ChatSession | undefined;
   isLoading: boolean;
   onSendMessage: (content: string, imageUrl?: string) => void;
-  mobileMenuButton: React.ReactNode;
   userProfile: UserProfile;
 }) {
 
   return (
-    <div className="flex flex-col h-screen">
-      <header className="flex items-center justify-between p-4 border-b shrink-0">
-        <div className="flex items-center gap-2">
-            {mobileMenuButton}
-            <h1 className="text-lg font-semibold font-headline">{activeChat ? activeChat.title : "DarlynAI"}</h1>
-        </div>
-      </header>
+    <div className="flex flex-col h-full">
       <main className="flex-1 overflow-y-auto">
           <div className="h-full max-w-4xl mx-auto">
               {activeChat ? (
