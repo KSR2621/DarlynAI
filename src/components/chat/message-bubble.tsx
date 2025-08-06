@@ -5,7 +5,7 @@ import type { Message } from '@/hooks/use-chat-history';
 import type { UserProfile } from '@/hooks/use-user-profile';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { User, Bot } from 'lucide-react';
-import { GeminiIcon } from '@/components/icons';
+import { DarlynAIicon } from '@/components/icons';
 import Image from 'next/image';
 import { CodeBlock } from './code-block';
 import { Card, CardContent } from '../ui/card';
@@ -62,7 +62,7 @@ export default function MessageBubble({ message, userProfile }: { message: Messa
     </Avatar>
   ) : (
     <Avatar className="h-8 w-8 bg-gradient-to-br from-purple-500 to-blue-500 flex items-center justify-center shrink-0">
-      <GeminiIcon className="w-6 h-6 text-white" />
+      <DarlynAIicon className="w-6 h-6 text-white" />
     </Avatar>
   );
 

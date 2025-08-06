@@ -8,7 +8,7 @@ const inter = Inter({ subsets: ['latin'], variable: '--font-inter' });
 const spaceGrotesk = Space_Grotesk({ subsets: ['latin'], variable: '--font-space-grotesk' });
 
 export const metadata: Metadata = {
-  title: 'Open Gemini',
+  title: 'DarlynAI',
   description: 'A clone of gemini.google.com built with Firebase and Next.js, open to all users.',
 };
 

@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useCallback } from 'react';
 
-const USER_PROFILE_KEY = 'openGeminiUserProfile';
+const USER_PROFILE_KEY = 'darlynAiUserProfile';
 
 export interface UserProfile {
   name: string;

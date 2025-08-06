@@ -1,6 +1,6 @@
 import React from 'react';
 
-export const GeminiIcon = (props: React.SVGProps<SVGSVGElement>) => (
+export const DarlynAIicon = (props: React.SVGProps<SVGSVGElement>) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
     viewBox="0 0 24 24"

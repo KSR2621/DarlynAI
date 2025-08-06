@@ -3,7 +3,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import type { ChatSession, Message } from '@/types';
 
-const CHAT_HISTORY_KEY = 'openGeminiChatHistory';
+const CHAT_HISTORY_KEY = 'darlynAiChatHistory';
 
 export function useChatHistory() {
   const [sessions, setSessions] = useState<ChatSession[]>([]);
