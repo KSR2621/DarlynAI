@@ -3,7 +3,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
-import { Paperclip, SendHoriz, X } from 'lucide-react';
+import { Paperclip, SendHorizontal, X } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import Image from 'next/image';
 
@@ -101,7 +101,7 @@ export default function ChatInput({ onSendMessage, isLoading }: ChatInputProps) 
           disabled={isLoading}
         />
         <Button size="icon" onClick={handleSend} disabled={isLoading || (!message.trim() && !imagePreview)}>
-          <SendHoriz />
+          <SendHorizontal />
           <span className="sr-only">Send message</span>
         </Button>
       </div>
