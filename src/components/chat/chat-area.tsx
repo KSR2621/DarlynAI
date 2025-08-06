@@ -22,8 +22,8 @@ export default function ChatArea({ activeChat, isLoading, onSendMessage, mobileM
 }) {
 
   return (
-    <div className="relative flex h-full flex-1 flex-col">
-       <header className="flex items-center justify-between p-4 border-b">
+    <div className="flex flex-col h-screen">
+      <header className="flex items-center justify-between p-4 border-b shrink-0">
         <div className="flex items-center gap-2">
             {mobileMenuButton}
             <h1 className="text-lg font-semibold font-headline">{activeChat ? activeChat.title : "DarlynAI"}</h1>
@@ -38,7 +38,7 @@ export default function ChatArea({ activeChat, isLoading, onSendMessage, mobileM
               )}
           </div>
       </main>
-      <footer className="p-4 bg-background/95 backdrop-blur-sm">
+      <footer className="p-4 bg-background/95 backdrop-blur-sm shrink-0">
         <div className="max-w-4xl mx-auto">
             <ChatInput onSendMessage={onSendMessage} isLoading={isLoading} />
             <p className="text-xs text-center text-muted-foreground mt-2">
