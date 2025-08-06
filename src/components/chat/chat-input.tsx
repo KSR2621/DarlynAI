@@ -67,7 +67,7 @@ export default function ChatInput({ onSendMessage, isLoading }: ChatInputProps) 
   };
 
   return (
-    <div className="relative">
+    <div className="relative max-w-4xl mx-auto w-full">
       {imagePreview && (
         <div className="absolute bottom-full left-0 mb-2 p-2 bg-secondary rounded-lg shadow-md">
             <div className="relative">
@@ -78,7 +78,7 @@ export default function ChatInput({ onSendMessage, isLoading }: ChatInputProps) 
             </div>
         </div>
       )}
-      <div className="flex items-end gap-2 p-2 rounded-lg border bg-card text-card-foreground shadow-sm">
+      <div className="flex items-end gap-2 p-2 rounded-lg border bg-secondary text-card-foreground shadow-sm">
         <Button variant="ghost" size="icon" className="shrink-0" onClick={() => fileInputRef.current?.click()}>
           <Paperclip />
           <span className="sr-only">Attach image</span>
@@ -95,8 +95,8 @@ export default function ChatInput({ onSendMessage, isLoading }: ChatInputProps) 
           value={message}
           onChange={(e) => setMessage(e.target.value)}
           onKeyDown={handleKeyDown}
-          placeholder="Ask anything..."
-          className="flex-1 resize-none border-none focus-visible:ring-0 focus-visible:ring-offset-0 shadow-none max-h-48"
+          placeholder="Message DarlynAI..."
+          className="flex-1 resize-none border-none focus-visible:ring-0 focus-visible:ring-offset-0 shadow-none max-h-48 bg-transparent"
           rows={1}
           disabled={isLoading}
         />

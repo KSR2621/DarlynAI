@@ -8,7 +8,7 @@ import {
   useSidebar,
 } from '@/components/ui/sidebar';
 import { Button } from '@/components/ui/button';
-import { PanelLeft } from 'lucide-react';
+import { Menu } from 'lucide-react';
 import SidebarContent from '@/components/chat/sidebar-content';
 import ChatArea from '@/components/chat/chat-area';
 import { useChatHistory, type ChatSession, type Message } from '@/hooks/use-chat-history';
@@ -25,7 +25,7 @@ function MobileMenuButton() {
       className="md:hidden"
       onClick={toggleSidebar}
     >
-      <PanelLeft />
+      <Menu />
       <span className="sr-only">Toggle Menu</span>
     </Button>
   );
@@ -72,7 +72,15 @@ export default function OpenGeminiPage() {
   }, [sessions, updateSession]);
 
   const handleSendMessage = useCallback(async (content: string, imageUrl?: string) => {
-    if (!activeChatId) return;
+    let currentChatId = activeChatId;
+
+    if (!currentChatId) {
+      const newSession = addSession();
+      setActiveChatId(newSession.id);
+      currentChatId = newSession.id;
+    }
+
+    if (!currentChatId) return;
 
     const userMessage: Message = {
       id: crypto.randomUUID(),
@@ -81,7 +89,7 @@ export default function OpenGeminiPage() {
       imageUrl,
       createdAt: Date.now(),
     };
-    addMessageToSession(activeChatId, userMessage);
+    addMessageToSession(currentChatId, userMessage);
     setIsLoading(true);
 
     try {
@@ -97,7 +105,7 @@ export default function OpenGeminiPage() {
           content: response.answer,
           createdAt: Date.now(),
         };
-        addMessageToSession(activeChatId, aiMessage);
+        addMessageToSession(currentChatId, aiMessage);
       } else {
         response = await generateAIResponse({ question: content });
         const aiMessage: Message = {
@@ -106,14 +114,14 @@ export default function OpenGeminiPage() {
           content: response.response,
           createdAt: Date.now(),
         };
-        addMessageToSession(activeChatId, aiMessage);
+        addMessageToSession(currentChatId, aiMessage);
       }
       
-      // Auto-generate title for the first message
-      if (activeChat && activeChat.messages.length === 1) {
-        const firstUserMessage = activeChat.messages[0].content;
+      const session = sessions.find(s => s.id === currentChatId);
+      if (session && session.messages.length === 1) {
+        const firstUserMessage = session.messages[0].content;
         const newTitle = firstUserMessage.split(' ').slice(0, 4).join(' ') + (firstUserMessage.length > 20 ? '...' : '');
-        updateSession({ ...activeChat, title: newTitle });
+        updateSession({ ...session, title: newTitle });
       }
 
     } catch (error) {
@@ -123,7 +131,6 @@ export default function OpenGeminiPage() {
         title: "Oh no! Something went wrong.",
         description: "There was a problem communicating with the AI. Please try again.",
       });
-      // Optional: remove the user's message on error, or add an error message to the chat
       const errorMessage: Message = {
         id: crypto.randomUUID(),
         role: 'assistant',
@@ -131,17 +138,17 @@ export default function OpenGeminiPage() {
         isError: true,
         createdAt: Date.now()
       }
-      addMessageToSession(activeChatId, errorMessage);
+      addMessageToSession(currentChatId, errorMessage);
 
     } finally {
       setIsLoading(false);
     }
-  }, [activeChatId, addMessageToSession, toast, activeChat, updateSession]);
+  }, [activeChatId, addMessageToSession, toast, sessions, updateSession, addSession]);
 
   return (
     <SidebarProvider>
       <div className="flex min-h-screen bg-background">
-        <Sidebar variant="sidebar" collapsible="offcanvas">
+        <Sidebar variant="sidebar" collapsible="icon">
           <SidebarContent
             sessions={sessions}
             activeChatId={activeChatId}

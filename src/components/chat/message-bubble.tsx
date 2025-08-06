@@ -53,7 +53,7 @@ export default function MessageBubble({ message }: { message: Message }) {
   const isUser = message.role === 'user';
   const avatar = isUser ? (
     <Avatar className="h-8 w-8">
-      <AvatarFallback><User size={20} /></AvatarFallback>
+      <AvatarFallback>U</AvatarFallback>
     </Avatar>
   ) : (
     <Avatar className="h-8 w-8 bg-gradient-to-br from-purple-500 to-blue-500 flex items-center justify-center">
@@ -65,8 +65,8 @@ export default function MessageBubble({ message }: { message: Message }) {
     <div className={`flex items-start gap-3 ${isUser ? 'justify-end' : ''}`}>
       {!isUser && avatar}
       <div className={`flex flex-col gap-1 max-w-[85%] ${isUser ? 'items-end' : 'items-start'}`}>
-        <Card className={`rounded-2xl ${isUser ? 'rounded-br-none bg-primary text-primary-foreground' : 'rounded-bl-none'}`}>
-          <CardContent className="p-3">
+        <div className={`rounded-2xl ${isUser ? 'rounded-br-none bg-secondary text-primary-foreground' : 'bg-transparent'}`}>
+          <div className="p-3">
             {message.imageUrl && (
               <div className="mb-2">
                 <Image
@@ -79,8 +79,8 @@ export default function MessageBubble({ message }: { message: Message }) {
               </div>
             )}
             {message.content && <MarkdownContent content={message.content} />}
-          </CardContent>
-        </Card>
+          </div>
+        </div>
       </div>
       {isUser && avatar}
     </div>

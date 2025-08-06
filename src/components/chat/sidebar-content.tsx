@@ -10,23 +10,17 @@ import {
   SidebarMenuItem,
   SidebarMenuButton,
   SidebarMenuAction,
+  useSidebar,
+  SidebarTrigger,
 } from '@/components/ui/sidebar';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { MessageSquare, Plus, Trash2, Check, X } from 'lucide-react';
+import { MessageSquare, Plus, Trash2, Check, X, HelpCircle, History, Settings } from 'lucide-react';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { ThemeToggle } from '@/components/chat/theme-toggle';
 import type { ChatSession } from '@/hooks/use-chat-history';
-import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
-
-type SidebarContentProps = {
-  sessions: ChatSession[];
-  activeChatId: string | null;
-  onNewChat: () => void;
-  onSelectChat: (id: string) => void;
-  onDeleteChat: (id: string) => void;
-  onRenameChat: (id: string, newTitle: string) => void;
-};
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
+import { Avatar, AvatarFallback } from '../ui/avatar';
 
 function SessionItem({
   session,
@@ -82,6 +76,7 @@ function SessionItem({
           onClick={onSelect}
           isActive={isActive}
           className="group/button"
+          tooltip={session.title}
         >
           <MessageSquare />
           <span className="flex-1">{session.title}</span>
@@ -121,23 +116,27 @@ export default function SidebarContent({
   onDeleteChat,
   onRenameChat,
 }: SidebarContentProps) {
+  const { isMobile, state } = useSidebar();
+  
   return (
     <div className="flex flex-col h-full">
-      <SidebarHeader>
-        <Tooltip>
-          <TooltipTrigger asChild>
-            <Button variant="outline" className="w-full" onClick={onNewChat}>
+      <SidebarHeader className="p-2">
+        <div className="flex items-center justify-between">
+           <div className="flex items-center gap-2">
+            <SidebarTrigger className='w-8 h-8 md:block hidden'/>
+            <h2 className={`font-semibold text-lg ${state === 'collapsed' && 'hidden'}`}>DarlynAI</h2>
+           </div>
+           <Button variant="ghost" className={`${state === 'collapsed' && 'hidden'}`} size="sm" onClick={onNewChat}>
               <Plus className="mr-2 h-4 w-4" />
               New Chat
             </Button>
-          </TooltipTrigger>
-          <TooltipContent side="right" align="center">New Chat</TooltipContent>
-        </Tooltip>
+        </div>
       </SidebarHeader>
       
       <SidebarBody className="flex-1">
         <ScrollArea className="h-full">
           <SidebarGroup>
+            <p className={`text-sm text-muted-foreground px-4 py-2 ${state === 'collapsed' && 'hidden'}`}>Recent</p>
             <SidebarMenu>
               {sessions.map((session) => (
                 <SessionItem
@@ -154,8 +153,35 @@ export default function SidebarContent({
         </ScrollArea>
       </SidebarBody>
       
-      <SidebarFooter>
-        <ThemeToggle />
+      <SidebarFooter className='mt-auto'>
+        <SidebarMenu>
+            <SidebarMenuItem>
+                <SidebarMenuButton tooltip="Help">
+                    <HelpCircle />
+                    <span>Help</span>
+                </SidebarMenuButton>
+            </SidebarMenuItem>
+            <SidebarMenuItem>
+                <SidebarMenuButton tooltip="Activity">
+                    <History />
+                    <span>Activity</span>
+                </SidebarMenuButton>
+            </SidebarMenuItem>
+            <SidebarMenuItem>
+                <SidebarMenuButton tooltip="Settings">
+                    <Settings />
+                    <span>Settings</span>
+                </SidebarMenuButton>
+            </SidebarMenuItem>
+        </SidebarMenu>
+        <div className='p-2'>
+          <SidebarMenuButton tooltip="User Profile">
+            <Avatar className='h-6 w-6'>
+                <AvatarFallback>U</AvatarFallback>
+            </Avatar>
+            <span>User</span>
+          </SidebarMenuButton>
+        </div>
       </SidebarFooter>
     </div>
   );

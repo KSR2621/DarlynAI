@@ -5,33 +5,50 @@ import type { ChatSession } from '@/hooks/use-chat-history';
 import EmptyChat from './empty-chat';
 import ChatMessages from './chat-messages';
 import ChatInput from './chat-input';
+import { useTheme } from 'next-themes';
+import { Moon, Sun } from 'lucide-react';
+import { Button } from '../ui/button';
+import { Avatar, AvatarFallback } from '../ui/avatar';
+import { User } from 'lucide-react';
 
-type ChatAreaProps = {
+export default function ChatArea({ activeChat, isLoading, onSendMessage, mobileMenuButton }: {
   activeChat: ChatSession | undefined;
   isLoading: boolean;
   onSendMessage: (content: string, imageUrl?: string) => void;
   mobileMenuButton: React.ReactNode;
-};
+}) {
+  const { theme, setTheme } = useTheme();
 
-export default function ChatArea({ activeChat, isLoading, onSendMessage, mobileMenuButton }: ChatAreaProps) {
   return (
     <div className="relative flex h-full max-w-full flex-1 flex-col">
-      {activeChat ? (
-        <>
-          <header className="flex items-center p-4 border-b">
+       <header className="flex items-center justify-between p-4 border-b">
+        <div className="flex items-center gap-2">
             {mobileMenuButton}
-            <h1 className="text-lg font-semibold ml-2 font-headline">{activeChat.title}</h1>
-          </header>
-          <div className="flex-1 overflow-y-auto">
-            <ChatMessages messages={activeChat.messages} isLoading={isLoading} />
-          </div>
-          <div className="p-4 bg-background/95 backdrop-blur-sm">
-            <ChatInput onSendMessage={onSendMessage} isLoading={isLoading} />
-          </div>
-        </>
-      ) : (
-        <EmptyChat mobileMenuButton={mobileMenuButton} />
-      )}
+            <h1 className="text-lg font-semibold font-headline">{activeChat ? activeChat.title : "DarlynAI"}</h1>
+        </div>
+        <div className="flex items-center gap-2">
+          <Button variant="ghost" size="icon" onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}>
+            <Moon className="h-5 w-5" />
+            <span className="sr-only">Toggle theme</span>
+          </Button>
+          <Avatar className='h-8 w-8'>
+            <AvatarFallback>U</AvatarFallback>
+          </Avatar>
+        </div>
+      </header>
+      <div className="flex-1 overflow-y-auto">
+        {activeChat ? (
+          <ChatMessages messages={activeChat.messages} isLoading={isLoading} />
+        ) : (
+          <EmptyChat onSendMessage={onSendMessage} />
+        )}
+      </div>
+      <div className="p-4 bg-background/95 backdrop-blur-sm">
+        <ChatInput onSendMessage={onSendMessage} isLoading={isLoading} />
+        <p className="text-xs text-center text-muted-foreground mt-2">
+            DarlynAI may display inaccurate info, including about people, so double-check its responses.
+        </p>
+      </div>
     </div>
   );
 }
