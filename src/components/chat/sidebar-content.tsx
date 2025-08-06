@@ -167,12 +167,12 @@ export default function SidebarContent({
   return (
     <div className="flex flex-col h-full">
       <SidebarHeader className="p-2">
-        <div className="flex items-center">
+        <div className="flex flex-col items-start gap-2">
            <div className="flex items-center gap-2">
             <SidebarTrigger className='w-8 h-8 md:block hidden'/>
             <h2 className={`font-semibold text-lg ${state === 'collapsed' && 'hidden'}`}>DarlynAI</h2>
            </div>
-           <Button variant="ghost" className={`${state === 'collapsed' && 'hidden'} ml-4 hover:bg-secondary`} size="sm" onClick={onNewChat}>
+           <Button variant="ghost" className={`${state === 'collapsed' && 'hidden'} w-full justify-start`} size="sm" onClick={onNewChat}>
               <Plus className="mr-2 h-4 w-4" />
               New Chat
             </Button>
