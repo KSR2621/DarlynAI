@@ -17,7 +17,6 @@ export default function ChatArea({ activeChat, isLoading, onSendMessage, mobileM
   onSendMessage: (content: string, imageUrl?: string) => void;
   mobileMenuButton: React.ReactNode;
 }) {
-  const { theme, setTheme } = useTheme();
 
   return (
     <div className="relative flex h-full max-w-full flex-1 flex-col">
@@ -27,10 +26,6 @@ export default function ChatArea({ activeChat, isLoading, onSendMessage, mobileM
             <h1 className="text-lg font-semibold font-headline">{activeChat ? activeChat.title : "DarlynAI"}</h1>
         </div>
         <div className="flex items-center gap-2">
-          <Button variant="ghost" size="icon" onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}>
-            <Moon className="h-5 w-5" />
-            <span className="sr-only">Toggle theme</span>
-          </Button>
           <Avatar className='h-8 w-8'>
             <AvatarFallback>U</AvatarFallback>
           </Avatar>

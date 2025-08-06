@@ -15,12 +15,30 @@ import {
 } from '@/components/ui/sidebar';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { MessageSquare, Plus, Trash2, Check, X, HelpCircle, History, Settings } from 'lucide-react';
+import { MessageSquare, Plus, Trash2, Check, X, HelpCircle, History, Settings, Bot } from 'lucide-react';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { ThemeToggle } from '@/components/chat/theme-toggle';
 import type { ChatSession } from '@/hooks/use-chat-history';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 import { Avatar, AvatarFallback } from '../ui/avatar';
+import { 
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from '@/components/ui/alert-dialog';
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 
 function SessionItem({
   session,
@@ -115,7 +133,7 @@ export default function SidebarContent({
   onSelectChat,
   onDeleteChat,
   onRenameChat,
-}: SidebarContentProps) {
+}: any) {
   const { isMobile, state } = useSidebar();
   
   return (
@@ -138,7 +156,7 @@ export default function SidebarContent({
           <SidebarGroup>
             <p className={`text-sm text-muted-foreground px-4 py-2 ${state === 'collapsed' && 'hidden'}`}>Recent</p>
             <SidebarMenu>
-              {sessions.map((session) => (
+              {sessions.map((session:any) => (
                 <SessionItem
                   key={session.id}
                   session={session}
@@ -156,22 +174,93 @@ export default function SidebarContent({
       <SidebarFooter className='mt-auto'>
         <SidebarMenu>
             <SidebarMenuItem>
-                <SidebarMenuButton tooltip="Help">
-                    <HelpCircle />
-                    <span>Help</span>
-                </SidebarMenuButton>
+              <AlertDialog>
+                <AlertDialogTrigger asChild>
+                  <SidebarMenuButton tooltip="Help">
+                      <HelpCircle />
+                      <span>Help</span>
+                  </SidebarMenuButton>
+                </AlertDialogTrigger>
+                <AlertDialogContent>
+                  <AlertDialogHeader>
+                    <AlertDialogTitle>Help</AlertDialogTitle>
+                    <AlertDialogDescription>
+                      This is an AI-powered chat application. You can ask questions, get explanations, and generate content.
+                      <h3 className="font-bold mt-4 mb-2">Keyboard Shortcuts</h3>
+                      <ul className="list-disc list-inside text-sm">
+                        <li><kbd className="font-mono bg-muted p-1 rounded-md">Ctrl/Cmd + B</kbd> - Toggle sidebar</li>
+                        <li><kbd className="font-mono bg-muted p-1 rounded-md">Enter</kbd> - Send message</li>
+                        <li><kbd className="font-mono bg-muted p-1 rounded-md">Shift + Enter</kbd> - New line</li>
+                      </ul>
+                    </AlertDialogDescription>
+                  </AlertDialogHeader>
+                  <AlertDialogFooter>
+                    <AlertDialogAction>Got it</AlertDialogAction>
+                  </AlertDialogFooter>
+                </AlertDialogContent>
+              </AlertDialog>
             </SidebarMenuItem>
             <SidebarMenuItem>
-                <SidebarMenuButton tooltip="Activity">
-                    <History />
-                    <span>Activity</span>
-                </SidebarMenuButton>
+              <Dialog>
+                <DialogTrigger asChild>
+                  <SidebarMenuButton tooltip="Activity">
+                      <History />
+                      <span>Activity</span>
+                  </SidebarMenuButton>
+                </DialogTrigger>
+                <DialogContent className="max-w-2xl">
+                  <DialogHeader>
+                    <DialogTitle>Activity</DialogTitle>
+                    <DialogDescription>
+                      Review and manage your past conversations.
+                    </DialogDescription>
+                  </DialogHeader>
+                  <ScrollArea className="h-96">
+                    <div className="space-y-4 pr-4">
+                    {sessions.length > 0 ? sessions.map((session: ChatSession) => (
+                      <div key={session.id} className="p-3 rounded-lg border bg-card hover:bg-secondary cursor-pointer" onClick={() => onSelectChat(session.id)}>
+                        <h3 className="font-semibold text-sm truncate">{session.title}</h3>
+                        <p className="text-xs text-muted-foreground">
+                          {session.messages.length} message{session.messages.length === 1 ? '' : 's'}
+                          {' - '}
+                          {new Date(session.createdAt).toLocaleDateString()}
+                        </p>
+                      </div>
+                    )) : (
+                      <div className="text-center text-muted-foreground py-16">
+                        <History className="mx-auto h-12 w-12" />
+                        <p className="mt-4">No activity yet</p>
+                        <p className="text-sm">Your chat history will appear here.</p>
+                      </div>
+                    )}
+                    </div>
+                  </ScrollArea>
+                </DialogContent>
+              </Dialog>
             </SidebarMenuItem>
             <SidebarMenuItem>
-                <SidebarMenuButton tooltip="Settings">
-                    <Settings />
-                    <span>Settings</span>
-                </SidebarMenuButton>
+              <Dialog>
+                <DialogTrigger asChild>
+                  <SidebarMenuButton tooltip="Settings">
+                      <Settings />
+                      <span>Settings</span>
+                  </SidebarMenuButton>
+                </DialogTrigger>
+                <DialogContent className="sm:max-w-[425px]">
+                  <DialogHeader>
+                    <DialogTitle>Settings</DialogTitle>
+                    <DialogDescription>
+                      Manage your application settings.
+                    </DialogDescription>
+                  </DialogHeader>
+                  <div className="grid gap-4 py-4">
+                    <div className="flex items-center justify-between">
+                      <label htmlFor="theme" className="text-sm font-medium">Theme</label>
+                      <ThemeToggle />
+                    </div>
+                  </div>
+                </DialogContent>
+              </Dialog>
             </SidebarMenuItem>
         </SidebarMenu>
         <div className='p-2'>
