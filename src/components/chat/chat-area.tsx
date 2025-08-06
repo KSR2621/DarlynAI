@@ -22,7 +22,7 @@ export default function ChatArea({ activeChat, isLoading, onSendMessage, mobileM
 }) {
 
   return (
-    <div className="relative flex h-full max-w-full flex-1 flex-col">
+    <div className="relative flex h-full flex-1 flex-col">
        <header className="flex items-center justify-between p-4 border-b">
         <div className="flex items-center gap-2">
             {mobileMenuButton}
@@ -38,19 +38,23 @@ export default function ChatArea({ activeChat, isLoading, onSendMessage, mobileM
           </Avatar>
         </div>
       </header>
-      <div className="flex-1 overflow-y-auto">
-        {activeChat ? (
-          <ChatMessages messages={activeChat.messages} isLoading={isLoading} userProfile={userProfile} />
-        ) : (
-          <EmptyChat onSendMessage={onSendMessage} userProfile={userProfile} />
-        )}
-      </div>
-      <div className="p-4 bg-background/95 backdrop-blur-sm">
-        <ChatInput onSendMessage={onSendMessage} isLoading={isLoading} />
-        <p className="text-xs text-center text-muted-foreground mt-2">
-            DarlynAI may display inaccurate info, including about people, so double-check its responses.
-        </p>
-      </div>
+      <main className="flex-1 overflow-y-auto">
+          <div className="max-w-4xl mx-auto h-full">
+              {activeChat ? (
+                <ChatMessages messages={activeChat.messages} isLoading={isLoading} userProfile={userProfile} />
+              ) : (
+                <EmptyChat onSendMessage={onSendMessage} userProfile={userProfile} />
+              )}
+          </div>
+      </main>
+      <footer className="p-4 bg-background/95 backdrop-blur-sm">
+        <div className="max-w-4xl mx-auto">
+            <ChatInput onSendMessage={onSendMessage} isLoading={isLoading} />
+            <p className="text-xs text-center text-muted-foreground mt-2">
+                DarlynAI may display inaccurate info, including about people, so double-check its responses.
+            </p>
+        </div>
+      </footer>
     </div>
   );
 }

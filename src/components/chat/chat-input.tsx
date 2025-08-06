@@ -67,7 +67,7 @@ export default function ChatInput({ onSendMessage, isLoading }: ChatInputProps) 
   };
 
   return (
-    <div className="relative max-w-4xl mx-auto w-full">
+    <div className="relative w-full">
       {imagePreview && (
         <div className="absolute bottom-full left-0 mb-2 p-2 bg-secondary rounded-lg shadow-md">
             <div className="relative">
