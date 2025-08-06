@@ -182,7 +182,15 @@ export default function SidebarContent({
       <SidebarBody className="flex-1">
         <ScrollArea className="h-full">
           <SidebarGroup>
-            <p className={`text-sm text-muted-foreground px-4 py-2 ${state === 'collapsed' && 'hidden'}`}>Recent</p>
+            <p className={`text-sm text-muted-foreground px-4 py-2 ${state === 'collapsed' ? 'hidden' : 'block'}`}>Recent</p>
+            <SidebarMenu className={`${state === 'collapsed' ? 'block' : 'hidden'}`}>
+                <SidebarMenuItem>
+                    <SidebarMenuButton tooltip="New Chat" onClick={onNewChat}>
+                        <Plus/>
+                        <span>New Chat</span>
+                    </SidebarMenuButton>
+                </SidebarMenuItem>
+            </SidebarMenu>
             <SidebarMenu>
               {sessions.map((session:any) => (
                 <SessionItem
