@@ -19,11 +19,13 @@ import { MessageSquare, Plus, Trash2, Check, X, HelpCircle, History, Settings, B
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { ThemeToggle } from '@/components/chat/theme-toggle';
 import type { ChatSession } from '@/hooks/use-chat-history';
+import type { UserProfile } from '@/hooks/use-user-profile';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
-import { Avatar, AvatarFallback } from '../ui/avatar';
+import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar';
 import { 
   AlertDialog,
   AlertDialogAction,
+  AlertDialogCancel,
   AlertDialogContent,
   AlertDialogDescription,
   AlertDialogFooter,
@@ -109,16 +111,31 @@ function SessionItem({
             >
               <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-file-pen-line"><path d="m18 5-3-3H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2"/><path d="M8 18h1"/><path d="M18.4 9.6a2 2 0 1 1 3 3L17 17l-4 1 1-4Z"/></svg>
             </SidebarMenuAction>
-            <SidebarMenuAction
-              onClick={(e) => {
-                e.stopPropagation();
-                onDelete();
-              }}
-              aria-label="Delete chat"
-              className="relative"
-            >
-              <Trash2 />
-            </SidebarMenuAction>
+            <AlertDialog>
+              <AlertDialogTrigger asChild>
+                <SidebarMenuAction
+                  onClick={(e) => {
+                    e.stopPropagation();
+                  }}
+                  aria-label="Delete chat"
+                  className="relative"
+                >
+                  <Trash2 />
+                </SidebarMenuAction>
+              </AlertDialogTrigger>
+              <AlertDialogContent>
+                <AlertDialogHeader>
+                  <AlertDialogTitle>Are you sure?</AlertDialogTitle>
+                  <AlertDialogDescription>
+                    This will permanently delete this chat session.
+                  </AlertDialogDescription>
+                </AlertDialogHeader>
+                <AlertDialogFooter>
+                  <AlertDialogCancel>Cancel</AlertDialogCancel>
+                  <AlertDialogAction onClick={onDelete}>Delete</AlertDialogAction>
+                </AlertDialogFooter>
+              </AlertDialogContent>
+            </AlertDialog>
           </div>
         </SidebarMenuButton>
       )}
@@ -133,7 +150,18 @@ export default function SidebarContent({
   onSelectChat,
   onDeleteChat,
   onRenameChat,
-}: any) {
+  userProfile,
+  onEditProfile,
+}: {
+  sessions: ChatSession[];
+  activeChatId: string | null;
+  onNewChat: () => void;
+  onSelectChat: (id: string) => void;
+  onDeleteChat: (id: string) => void;
+  onRenameChat: (id: string, newTitle: string) => void;
+  userProfile: UserProfile;
+  onEditProfile: () => void;
+}) {
   const { isMobile, state } = useSidebar();
   
   return (
@@ -218,14 +246,16 @@ export default function SidebarContent({
                   <ScrollArea className="h-96">
                     <div className="space-y-4 pr-4">
                     {sessions.length > 0 ? sessions.map((session: ChatSession) => (
-                      <div key={session.id} className="p-3 rounded-lg border bg-card hover:bg-secondary cursor-pointer" onClick={() => onSelectChat(session.id)}>
-                        <h3 className="font-semibold text-sm truncate">{session.title}</h3>
-                        <p className="text-xs text-muted-foreground">
-                          {session.messages.length} message{session.messages.length === 1 ? '' : 's'}
-                          {' - '}
-                          {new Date(session.createdAt).toLocaleDateString()}
-                        </p>
-                      </div>
+                      <DialogTrigger asChild key={session.id}>
+                        <div key={session.id} className="p-3 rounded-lg border bg-card hover:bg-secondary cursor-pointer" onClick={() => onSelectChat(session.id)}>
+                          <h3 className="font-semibold text-sm truncate">{session.title}</h3>
+                          <p className="text-xs text-muted-foreground">
+                            {session.messages.length} message{session.messages.length === 1 ? '' : 's'}
+                            {' - '}
+                            {new Date(session.createdAt).toLocaleDateString()}
+                          </p>
+                        </div>
+                      </DialogTrigger>
                     )) : (
                       <div className="text-center text-muted-foreground py-16">
                         <History className="mx-auto h-12 w-12" />
@@ -264,11 +294,15 @@ export default function SidebarContent({
             </SidebarMenuItem>
         </SidebarMenu>
         <div className='p-2'>
-          <SidebarMenuButton tooltip="User Profile">
+          <SidebarMenuButton tooltip="User Profile" onClick={onEditProfile}>
             <Avatar className='h-6 w-6'>
-                <AvatarFallback>U</AvatarFallback>
+                {userProfile.photoDataUri ? (
+                    <AvatarImage src={userProfile.photoDataUri} alt={userProfile.name} />
+                ) : (
+                    <AvatarFallback>{userProfile.name?.[0]?.toUpperCase() || 'U'}</AvatarFallback>
+                )}
             </Avatar>
-            <span>User</span>
+            <span>{userProfile.name || 'User'}</span>
           </SidebarMenuButton>
         </div>
       </SidebarFooter>

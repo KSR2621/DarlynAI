@@ -2,6 +2,7 @@
 
 import React from 'react';
 import type { Message } from '@/hooks/use-chat-history';
+import type { UserProfile } from '@/hooks/use-user-profile';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { User, Bot } from 'lucide-react';
 import { GeminiIcon } from '@/components/icons';
@@ -49,11 +50,15 @@ const MarkdownContent = ({ content }: { content: string }) => {
     );
 };
 
-export default function MessageBubble({ message }: { message: Message }) {
+export default function MessageBubble({ message, userProfile }: { message: Message, userProfile: UserProfile }) {
   const isUser = message.role === 'user';
   const avatar = isUser ? (
     <Avatar className="h-8 w-8">
-      <AvatarFallback>U</AvatarFallback>
+      {userProfile.photoDataUri ? (
+        <AvatarImage src={userProfile.photoDataUri} alt={userProfile.name} />
+      ) : (
+        <AvatarFallback>{userProfile.name?.[0]?.toUpperCase() || 'U'}</AvatarFallback>
+      )}
     </Avatar>
   ) : (
     <Avatar className="h-8 w-8 bg-gradient-to-br from-purple-500 to-blue-500 flex items-center justify-center">
@@ -65,21 +70,19 @@ export default function MessageBubble({ message }: { message: Message }) {
     <div className={`flex items-start gap-3 ${isUser ? 'justify-end' : ''}`}>
       {!isUser && avatar}
       <div className={`flex flex-col gap-1 max-w-[85%] ${isUser ? 'items-end' : 'items-start'}`}>
-        <div className={`rounded-2xl ${isUser ? 'rounded-br-none bg-secondary text-primary-foreground' : 'bg-transparent'}`}>
-          <div className="p-3">
-            {message.imageUrl && (
-              <div className="mb-2">
-                <Image
-                  src={message.imageUrl}
-                  alt="User upload"
-                  width={300}
-                  height={300}
-                  className="rounded-lg object-cover"
-                />
-              </div>
-            )}
-            {message.content && <MarkdownContent content={message.content} />}
-          </div>
+        <div className={`rounded-2xl p-3 ${isUser ? 'rounded-br-none bg-primary text-primary-foreground' : 'bg-secondary'}`}>
+          {message.imageUrl && (
+            <div className="mb-2">
+              <Image
+                src={message.imageUrl}
+                alt="User upload"
+                width={300}
+                height={300}
+                className="rounded-lg object-cover"
+              />
+            </div>
+          )}
+          {message.content && <MarkdownContent content={message.content} />}
         </div>
       </div>
       {isUser && avatar}

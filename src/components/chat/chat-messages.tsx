@@ -5,6 +5,7 @@ import type { Message } from '@/hooks/use-chat-history';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import MessageBubble from './message-bubble';
 import { AnimatePresence, motion } from 'framer-motion';
+import type { UserProfile } from '@/hooks/use-user-profile';
 
 type TypingIndicatorProps = {
   className?: string;
@@ -45,9 +46,10 @@ const TypingIndicator: React.FC<TypingIndicatorProps> = ({ className }) => {
 type ChatMessagesProps = {
   messages: Message[];
   isLoading: boolean;
+  userProfile: UserProfile;
 };
 
-export default function ChatMessages({ messages, isLoading }: ChatMessagesProps) {
+export default function ChatMessages({ messages, isLoading, userProfile }: ChatMessagesProps) {
   const scrollAreaRef = useRef<HTMLDivElement>(null);
   const viewportRef = useRef<HTMLDivElement>(null);
 
@@ -70,7 +72,7 @@ export default function ChatMessages({ messages, isLoading }: ChatMessagesProps)
               exit={{ opacity: 0, scale: 0.95, y: -20 }}
               transition={{ duration: 0.3, ease: 'easeOut' }}
             >
-              <MessageBubble message={message} />
+              <MessageBubble message={message} userProfile={userProfile} />
             </motion.div>
           ))}
         </AnimatePresence>

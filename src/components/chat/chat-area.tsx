@@ -8,14 +8,17 @@ import ChatInput from './chat-input';
 import { useTheme } from 'next-themes';
 import { Moon, Sun } from 'lucide-react';
 import { Button } from '../ui/button';
-import { Avatar, AvatarFallback } from '../ui/avatar';
+import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar';
 import { User } from 'lucide-react';
+import type { UserProfile } from '@/hooks/use-user-profile';
+import Image from 'next/image';
 
-export default function ChatArea({ activeChat, isLoading, onSendMessage, mobileMenuButton }: {
+export default function ChatArea({ activeChat, isLoading, onSendMessage, mobileMenuButton, userProfile }: {
   activeChat: ChatSession | undefined;
   isLoading: boolean;
   onSendMessage: (content: string, imageUrl?: string) => void;
   mobileMenuButton: React.ReactNode;
+  userProfile: UserProfile;
 }) {
 
   return (
@@ -27,13 +30,17 @@ export default function ChatArea({ activeChat, isLoading, onSendMessage, mobileM
         </div>
         <div className="flex items-center gap-2">
           <Avatar className='h-8 w-8'>
-            <AvatarFallback>U</AvatarFallback>
+             {userProfile.photoDataUri ? (
+                <AvatarImage src={userProfile.photoDataUri} alt={userProfile.name} />
+              ) : (
+                <AvatarFallback>{userProfile.name?.[0]?.toUpperCase() || 'U'}</AvatarFallback>
+              )}
           </Avatar>
         </div>
       </header>
       <div className="flex-1 overflow-y-auto">
         {activeChat ? (
-          <ChatMessages messages={activeChat.messages} isLoading={isLoading} />
+          <ChatMessages messages={activeChat.messages} isLoading={isLoading} userProfile={userProfile} />
         ) : (
           <EmptyChat onSendMessage={onSendMessage} />
         )}

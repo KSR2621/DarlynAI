@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useMemo, useCallback } from 'react';
+import React, { useState, useMemo, useCallback, useEffect } from 'react';
 import {
   SidebarProvider,
   Sidebar,
@@ -15,6 +15,8 @@ import { useChatHistory, type ChatSession, type Message } from '@/hooks/use-chat
 import { generateAIResponse } from '@/ai/flows/generate-ai-responses';
 import { interpretImages } from '@/ai/flows/interpret-images';
 import { useToast } from '@/hooks/use-toast';
+import { useUserProfile } from '@/hooks/use-user-profile';
+import UserProfileDialog from '@/components/chat/user-profile-dialog';
 
 function MobileMenuButton() {
   const { toggleSidebar } = useSidebar();
@@ -39,9 +41,17 @@ export default function OpenGeminiPage() {
     deleteSession,
     addMessageToSession,
   } = useChatHistory();
+  const { userProfile, setUserProfile, isLoaded: isProfileLoaded } = useUserProfile();
   const [activeChatId, setActiveChatId] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [isProfileDialogOpen, setIsProfileDialogOpen] = useState(false);
   const { toast } = useToast();
+
+  useEffect(() => {
+    if (isProfileLoaded && !userProfile.name) {
+      setIsProfileDialogOpen(true);
+    }
+  }, [isProfileLoaded, userProfile.name]);
 
   const activeChat = useMemo(
     () => sessions.find((s) => s.id === activeChatId),
@@ -118,10 +128,12 @@ export default function OpenGeminiPage() {
       }
       
       const session = sessions.find(s => s.id === currentChatId);
-      if (session && session.messages.length === 1) {
-        const firstUserMessage = session.messages[0].content;
-        const newTitle = firstUserMessage.split(' ').slice(0, 4).join(' ') + (firstUserMessage.length > 20 ? '...' : '');
-        updateSession({ ...session, title: newTitle });
+      if (session && session.messages.length === 2 && !session.title.startsWith('New Chat')) {
+          const firstUserMessage = session.messages.find(m => m.role === 'user')?.content || '';
+          const newTitle = firstUserMessage.split(' ').slice(0, 4).join(' ') + (firstUserMessage.length > 20 ? '...' : '');
+          if (newTitle) {
+            updateSession({ ...session, title: newTitle });
+          }
       }
 
     } catch (error) {
@@ -145,6 +157,15 @@ export default function OpenGeminiPage() {
     }
   }, [activeChatId, addMessageToSession, toast, sessions, updateSession, addSession]);
 
+  const handleProfileSave = (name: string, photo?: string) => {
+    setUserProfile({ name, photoDataUri: photo });
+    setIsProfileDialogOpen(false);
+    toast({
+        title: "Profile updated!",
+        description: "Your name and photo have been saved.",
+    });
+  };
+
   return (
     <SidebarProvider>
       <div className="flex min-h-screen bg-background">
@@ -156,6 +177,8 @@ export default function OpenGeminiPage() {
             onSelectChat={handleSelectChat}
             onDeleteChat={handleDeleteChat}
             onRenameChat={handleRenameChat}
+            userProfile={userProfile}
+            onEditProfile={() => setIsProfileDialogOpen(true)}
           />
         </Sidebar>
         <SidebarInset className="flex flex-col flex-1">
@@ -164,9 +187,16 @@ export default function OpenGeminiPage() {
               isLoading={isLoading}
               onSendMessage={handleSendMessage}
               mobileMenuButton={<MobileMenuButton />}
+              userProfile={userProfile}
             />
         </SidebarInset>
       </div>
+      <UserProfileDialog 
+        isOpen={isProfileDialogOpen}
+        onOpenChange={setIsProfileDialogOpen}
+        onSave={handleProfileSave}
+        userProfile={userProfile}
+      />
     </SidebarProvider>
   );
 }
