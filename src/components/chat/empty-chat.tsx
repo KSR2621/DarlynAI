@@ -34,7 +34,7 @@ const suggestionCards = [
 
 export default function EmptyChat({ onSendMessage, userProfile }: { onSendMessage: (content: string) => void, userProfile: UserProfile }) {
   return (
-    <div className="flex flex-col justify-end md:justify-between flex-1 p-4 h-full max-w-4xl mx-auto">
+    <div className="flex flex-col justify-end md:justify-between flex-1 p-4 h-full">
         <div className="text-left w-full mb-8 md:mb-12 flex-grow flex flex-col justify-center">
             <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold font-headline bg-clip-text text-transparent bg-gradient-to-br from-blue-400 to-purple-600">
                 Hello {userProfile.name || 'there'}
