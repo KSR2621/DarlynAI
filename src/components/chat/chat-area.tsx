@@ -42,7 +42,7 @@ export default function ChatArea({ activeChat, isLoading, onSendMessage, mobileM
         {activeChat ? (
           <ChatMessages messages={activeChat.messages} isLoading={isLoading} userProfile={userProfile} />
         ) : (
-          <EmptyChat onSendMessage={onSendMessage} />
+          <EmptyChat onSendMessage={onSendMessage} userProfile={userProfile} />
         )}
       </div>
       <div className="p-4 bg-background/95 backdrop-blur-sm">
