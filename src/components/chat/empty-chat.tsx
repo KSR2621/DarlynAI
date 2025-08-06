@@ -34,26 +34,26 @@ const suggestionCards = [
 
 export default function EmptyChat({ onSendMessage, userProfile }: { onSendMessage: (content: string) => void, userProfile: UserProfile }) {
   return (
-    <div className="flex flex-col justify-between flex-1 p-4 h-full max-w-4xl mx-auto">
-        <div className="text-left w-full mb-12 flex-grow flex flex-col justify-center">
-            <h1 className="text-5xl md:text-6xl font-bold font-headline bg-clip-text text-transparent bg-gradient-to-br from-blue-400 to-purple-600">
+    <div className="flex flex-col justify-end md:justify-between flex-1 p-4 h-full max-w-4xl mx-auto">
+        <div className="text-left w-full mb-8 md:mb-12 flex-grow flex flex-col justify-center">
+            <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold font-headline bg-clip-text text-transparent bg-gradient-to-br from-blue-400 to-purple-600">
                 Hello {userProfile.name || 'there'}
             </h1>
-            <p className="mt-2 text-2xl md:text-3xl text-muted-foreground">
+            <p className="mt-2 text-xl sm:text-2xl md:text-3xl text-muted-foreground">
                 How can I help you today?
             </p>
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 w-full">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-4 w-full">
             {suggestionCards.map((card) => (
-                <Card key={card.title} className="p-4 flex items-start gap-4 hover:bg-secondary cursor-pointer" onClick={() => onSendMessage(card.prompt)}>
+                <Card key={card.title} className="p-3 sm:p-4 flex items-start gap-3 sm:gap-4 hover:bg-secondary cursor-pointer" onClick={() => onSendMessage(card.prompt)}>
                     <div className="p-2 bg-secondary rounded-full">
                         {card.icon}
                     </div>
                     <div>
-                        <h3 className="font-semibold">{card.title}</h3>
-                        <p className="text-sm text-muted-foreground">{card.description}</p>
+                        <h3 className="font-semibold text-sm sm:text-base">{card.title}</h3>
+                        <p className="text-xs sm:text-sm text-muted-foreground">{card.description}</p>
                     </div>
-                    <ArrowUp className="w-5 h-5 ml-auto text-muted-foreground" />
+                    <ArrowUp className="w-5 h-5 ml-auto text-muted-foreground hidden sm:block" />
                 </Card>
             ))}
         </div>

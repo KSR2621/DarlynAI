@@ -61,15 +61,15 @@ export default function MessageBubble({ message, userProfile }: { message: Messa
       )}
     </Avatar>
   ) : (
-    <Avatar className="h-8 w-8 bg-gradient-to-br from-purple-500 to-blue-500 flex items-center justify-center">
+    <Avatar className="h-8 w-8 bg-gradient-to-br from-purple-500 to-blue-500 flex items-center justify-center shrink-0">
       <GeminiIcon className="w-6 h-6 text-white" />
     </Avatar>
   );
 
   return (
-    <div className={`flex items-start gap-3 ${isUser ? 'justify-end' : ''}`}>
+    <div className={`flex items-start gap-3 ${isUser ? 'justify-end' : 'justify-start'}`}>
       {!isUser && avatar}
-      <div className={`flex flex-col gap-1 max-w-[85%] ${isUser ? 'items-end' : 'items-start'}`}>
+      <div className={`flex flex-col gap-1 max-w-[85%] sm:max-w-[75%] ${isUser ? 'items-end' : 'items-start'}`}>
         <div className={`rounded-2xl p-3 ${isUser ? 'rounded-br-none bg-primary text-primary-foreground' : 'bg-secondary'}`}>
           {message.imageUrl && (
             <div className="mb-2">
