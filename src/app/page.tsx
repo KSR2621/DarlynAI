@@ -176,7 +176,7 @@ export default function OpenGeminiPage() {
 
   return (
     <SidebarProvider>
-      <div className="flex min-h-screen bg-background">
+      <div className="flex h-screen bg-background">
         <Sidebar variant="sidebar" collapsible="icon">
           <SidebarContent
             sessions={sessions}
@@ -189,8 +189,8 @@ export default function OpenGeminiPage() {
             onEditProfile={() => setIsProfileDialogOpen(true)}
           />
         </Sidebar>
-        <SidebarInset className="flex flex-col flex-1">
-            <header className="flex items-center justify-between p-4 border-b">
+        <SidebarInset className="flex flex-col flex-1 h-screen">
+            <header className="flex items-center justify-between p-4 border-b shrink-0">
               <div className="flex items-center gap-2">
                 <MobileMenuButton />
                 <h1 className="text-lg font-semibold font-headline">{activeChat ? activeChat.title : "DarlynAI"}</h1>

@@ -22,9 +22,9 @@ export default function ChatArea({ activeChat, isLoading, onSendMessage, userPro
 }) {
 
   return (
-    <div className="flex flex-col h-full">
+    <div className="flex flex-col flex-1 overflow-hidden">
       <main className="flex-1 overflow-y-auto">
-          <div className="h-full max-w-4xl mx-auto">
+          <div className="h-full max-w-4xl mx-auto px-4">
               {activeChat ? (
                 <ChatMessages messages={activeChat.messages} isLoading={isLoading} userProfile={userProfile} />
               ) : (
@@ -32,7 +32,7 @@ export default function ChatArea({ activeChat, isLoading, onSendMessage, userPro
               )}
           </div>
       </main>
-      <footer className="p-4 bg-background/95 backdrop-blur-sm shrink-0">
+      <footer className="p-4 bg-background/95 backdrop-blur-sm shrink-0 border-t">
         <div className="max-w-4xl mx-auto">
             <ChatInput onSendMessage={onSendMessage} isLoading={isLoading} />
             <p className="text-xs text-center text-muted-foreground mt-2">
