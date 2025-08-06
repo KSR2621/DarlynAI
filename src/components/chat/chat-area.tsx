@@ -28,15 +28,6 @@ export default function ChatArea({ activeChat, isLoading, onSendMessage, mobileM
             {mobileMenuButton}
             <h1 className="text-lg font-semibold font-headline">{activeChat ? activeChat.title : "DarlynAI"}</h1>
         </div>
-        <div className="flex items-center gap-2">
-          <Avatar className='h-8 w-8'>
-             {userProfile.photoDataUri ? (
-                <AvatarImage src={userProfile.photoDataUri} alt={userProfile.name} />
-              ) : (
-                <AvatarFallback>{userProfile.name?.[0]?.toUpperCase() || 'U'}</AvatarFallback>
-              )}
-          </Avatar>
-        </div>
       </header>
       <main className="flex-1 overflow-y-auto">
           <div className="max-w-4xl mx-auto h-full">

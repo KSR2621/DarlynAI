@@ -8,7 +8,7 @@ import {
   useSidebar,
 } from '@/components/ui/sidebar';
 import { Button } from '@/components/ui/button';
-import { Menu } from 'lucide-react';
+import { Menu, User } from 'lucide-react';
 import SidebarContent from '@/components/chat/sidebar-content';
 import ChatArea from '@/components/chat/chat-area';
 import { useChatHistory, type ChatSession, type Message } from '@/hooks/use-chat-history';
@@ -17,6 +17,13 @@ import { interpretImages } from '@/ai/flows/interpret-images';
 import { useToast } from '@/hooks/use-toast';
 import { useUserProfile } from '@/hooks/use-user-profile';
 import UserProfileDialog from '@/components/chat/user-profile-dialog';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from '@/components/ui/tooltip';
 
 function MobileMenuButton() {
   const { toggleSidebar } = useSidebar();
@@ -181,7 +188,33 @@ export default function OpenGeminiPage() {
             onEditProfile={() => setIsProfileDialogOpen(true)}
           />
         </Sidebar>
-        <SidebarInset className="flex flex-col flex-1">
+        <SidebarInset className="relative flex flex-col flex-1">
+           <TooltipProvider>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <button
+                    onClick={() => setIsProfileDialogOpen(true)}
+                    className="absolute top-4 right-4 z-10"
+                  >
+                    <Avatar className="h-8 w-8">
+                      {userProfile.photoDataUri ? (
+                        <AvatarImage
+                          src={userProfile.photoDataUri}
+                          alt={userProfile.name}
+                        />
+                      ) : (
+                        <AvatarFallback>
+                          {userProfile.name?.[0]?.toUpperCase() || <User className="h-5 w-5" />}
+                        </AvatarFallback>
+                      )}
+                    </Avatar>
+                  </button>
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p>Edit Profile</p>
+                </TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
             <ChatArea
               activeChat={activeChat}
               isLoading={isLoading}
