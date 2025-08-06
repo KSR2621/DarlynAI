@@ -61,7 +61,7 @@ export default function ChatMessages({ messages, isLoading, userProfile }: ChatM
 
   return (
     <ScrollArea className="h-full" viewportRef={viewportRef}>
-      <div className="p-4 space-y-6" ref={scrollAreaRef}>
+      <div className="p-4 space-y-6 max-w-4xl mx-auto" ref={scrollAreaRef}>
         <AnimatePresence initial={false}>
           {messages.map((message) => (
             <motion.div

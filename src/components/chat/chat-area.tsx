@@ -30,7 +30,7 @@ export default function ChatArea({ activeChat, isLoading, onSendMessage, mobileM
         </div>
       </header>
       <main className="flex-1 overflow-y-auto">
-          <div className="max-w-4xl mx-auto h-full">
+          <div className="h-full">
               {activeChat ? (
                 <ChatMessages messages={activeChat.messages} isLoading={isLoading} userProfile={userProfile} />
               ) : (
