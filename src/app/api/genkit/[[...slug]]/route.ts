@@ -4,24 +4,24 @@
 
 /**
  * @fileoverview This file creates a Next.js API route to handle Genkit AI flows.
- * It imports the necessary Genkit flows and exposes them via the genkitNextHandler.
+ * It imports the necessary Genkit flows and exposes them via the createNextHandler.
  * This is required for deploying to environments like Vercel.
  */
 
-// 1. Corrected the import from 'createNextApiHandler' to 'genkitNextHandler'
-import { genkitNextHandler } from '@genkit-ai/next';
+// 1. This is the correct import for the Next.js App Router.
+import { createNextHandler } from '@genkit-ai/next';
 
-// These imports are correct and should remain
+// 2. These imports load your defined flows so Genkit can serve them.
 import '@/ai/flows/generate-ai-responses';
 import '@/ai/flows/interpret-images';
 
 /* 
- * NOTE: The dotenv/config call is generally not needed on Vercel.
+ * Your note is correct: The dotenv/config call is not needed on Vercel.
  * Vercel automatically injects environment variables from your project's settings.
- * You can likely remove the dotenv import and config() call.
  */
-// import { config } from 'dotenv';
-// config();
 
-// 2. Corrected the usage to the new pattern for the App Router
-export const { GET, POST } = genkitNextHandler();
+// 3. createNextHandler() returns a single handler function.
+const handler = createNextHandler();
+
+// 4. Export the handler for both GET and POST requests, as required by the App Router.
+export { handler as GET, handler as POST };
